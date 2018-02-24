@@ -72,39 +72,56 @@ contract('Tender', function(accounts) {
   it("Alice submits a sealed offer", async function() {
     offer = "ekato lefta";
     offer_sealed = "|" + offer + "|";
-    const resp = await tender.submit_sealed_offer.call(web3.sha3(offer), offer_sealed, {from: alice});
-    assert.equal(resp, true);
+
+    let newOffer = tender.NewOffer()
+    await tender.submit_sealed_offer(web3.sha3(offer), offer_sealed, {from: alice});
+    let newOfferLog = await new Promise(
+        (resolve, reject) => newOffer.get(
+        (error, log) => error ? reject(error) : resolve(log)));
+    assert.equal(newOfferLog.length, 1, 'Only 1 event should have fired');
   })
 
   it("Bob submits a sealed offer", async function() {
     offer = "ekato ena lefta";
     offer_sealed = "|" + offer + "|";
-    const resp = await tender.submit_sealed_offer.call(web3.sha3(offer), offer_sealed, {from: bob});
-    assert.equal(resp, true);
+    let newOffer = tender.NewOffer();
+    await tender.submit_sealed_offer(web3.sha3(offer), offer_sealed, {from: bob});
+    let newOfferLog = await new Promise(
+        (resolve, reject) => newOffer.get(
+        (error, log) => error ? reject(error) : resolve(log)));
+    assert.equal(newOfferLog.length, 1, 'Only 1 event should have fired');
   })
 
   it("David submits a sealed offer", async function() {
     offer = "ena lefta";
     offer_sealed = "|" + offer + "|";
-    const resp = await tender.submit_sealed_offer.call(web3.sha3(offer), offer_sealed, {from: david});
-    assert.equal(resp, true);
+    let newOffer = tender.NewOffer();
+    const resp = await tender.submit_sealed_offer(web3.sha3(offer), offer_sealed, {from: david});
+    let newOfferLog = await new Promise(
+        (resolve, reject) => newOffer.get(
+        (error, log) => error ? reject(error) : resolve(log)));
+    assert.equal(newOfferLog.length, 1, 'Only 1 event should have fired');
   })
 
   it("Eve submits a sealed offer", async function() {
     offer = "shillia lefta";
     offer_sealed = "|" + offer + "|";
-    const resp = await tender.submit_sealed_offer.call(web3.sha3(offer), offer_sealed, {from: eve});
-    assert.equal(resp, true);
+    let newOffer = tender.NewOffer();
+    const resp = await tender.submit_sealed_offer(web3.sha3(offer), offer_sealed, {from: eve});
+    let newOfferLog = await new Promise(
+        (resolve, reject) => newOffer.get(
+        (error, log) => error ? reject(error) : resolve(log)));
+    assert.equal(newOfferLog.length, 1, 'Only 1 event should have fired');
   })
 
   it("Carol submits a sealed offer after submission due time and it fails", async function() {
-      await timeTravel(31)
-      mineBlock()
+      await timeTravel(31);
+      mineBlock();
       offer = "mouxti";
       offer_sealed = "|" + offer + "|";
       let error
       try {
-          await tender.submit_sealed_offer.call(web3.sha3(offer), offer_sealed, {from: carol});
+          await tender.submit_sealed_offer(web3.sha3(offer), offer_sealed, {from: carol});
       } catch (err) {
           error = err;
       }
@@ -112,44 +129,136 @@ contract('Tender', function(accounts) {
   })
 
   it("Alice shares key with unsealer", async function() {
-      unsealer_key = "klidi11idilk"
-      // try {
-      //   const resp = await tender.share_key_with_unsealer.call(unsealer_key, {from: alice});
-      // } catch (err) {
-      //   console.log(err);
-      // }
-      const resp = await tender.share_key_with_unsealer.call(unsealer_key, {from: alice});
-      assert.equal(resp, true);
+      symetric_key = "klidi11idilk"
+      unsealer_key = "+" + symetric_key + "+"
+      let unsealerKeyShared = tender.UnsealerKeyShared();
+      const resp = await tender.share_key_with_unsealer(unsealer_key, {from: alice});
+      let unsealerKeySharedLog = await new Promise(
+          (resolve, reject) => unsealerKeyShared.get(
+          (error, log) => error ? reject(error) : resolve(log)));
+      assert.equal(unsealerKeySharedLog.length, 1, 'Only 1 event should have fired');
   })
 
   it("Bob shares key with unsealer", async function() {
-      unsealer_key = "klidi22idilk"
-      const resp = await tender.share_key_with_unsealer.call(unsealer_key, {from: bob});
-      assert.equal(resp, true);
+      symetric_key = "klidi22idilk"
+      unsealer_key = "+" + symetric_key + "+"
+      let unsealerKeyShared = tender.UnsealerKeyShared();
+      const resp = await tender.share_key_with_unsealer(unsealer_key, {from: bob});
+      let unsealerKeySharedLog = await new Promise(
+          (resolve, reject) => unsealerKeyShared.get(
+          (error, log) => error ? reject(error) : resolve(log)));
+      assert.equal(unsealerKeySharedLog.length, 1, 'Only 1 event should have fired');
   })
 
   it("Eve shares key with unsealer", async function() {
-      unsealer_key = "klidi33idilk"
-      const resp = await tender.share_key_with_unsealer.call(unsealer_key, {from: eve});
-      assert.equal(resp, true);
+      symetric_key = "klidi33idilk"
+      unsealer_key = "+" + symetric_key + "+"
+      let unsealerKeyShared = tender.UnsealerKeyShared();
+      const resp = await tender.share_key_with_unsealer(unsealer_key, {from: eve});
+      let unsealerKeySharedLog = await new Promise(
+          (resolve, reject) => unsealerKeyShared.get(
+          (error, log) => error ? reject(error) : resolve(log)));
+      assert.equal(unsealerKeySharedLog.length, 1, 'Only 1 event should have fired');
   })
 
-  it("David shares key with unsealer after sealing time due", async function() {
-      await timeTravel(270)
-      mineBlock()
-      unsealer_key = "klidi44idilk"
+  AWAITING_UNSEALER = 0;
+  UNSEALER_REJECTED = 1;
+  UNSEALED = 2;
+
+  it("Unsealer unseals Alices offer", async function() {
+      secret_key = "klidi11idilk"
+      selector_key = "*" + secret_key + "*"
+      unseal_status = UNSEALED
+      let offerUnsealed = tender.OfferUnsealed();
+      const resp = await tender.unseal_offer(alice, selector_key, unseal_status, {from: unsealer});
+      let offerUnsealedLog = await new Promise(
+          (resolve, reject) => offerUnsealed.get(
+          (error, log) => error ? reject(error) : resolve(log)));
+      assert.equal(offerUnsealedLog.length, 1, 'Only 1 event should have fired');
+  })
+
+  it("Eve fails to unseal Bobs offer", async function() {
+      secret_key = "random11modnar"
+      selector_key = "*" + secret_key + "*"
+      unseal_status = UNSEALED
       let error
       try {
-          await tender.share_key_with_unsealer.call(unsealer_key, {from: david});
+          await tender.unseal_offer(bob, selector_key, unseal_status, {from: eve});
       } catch (err) {
           error = err;
       }
       assert.notEqual(error, undefined, 'Error must be thrown');
   })
 
-  // it("should assert true", function(done) {
-  //   var test = test.deployed();
-  //   assert.isTrue(true);
-  //   done();
-  // });
+  it("Unsealer unseals Bobs offer", async function() {
+      secret_key = "klidi22idilk"
+      selector_key = "*" + secret_key + "*"
+      unseal_status = UNSEALED
+      let offerUnsealed = tender.OfferUnsealed();
+      const resp = await tender.unseal_offer(bob, selector_key, unseal_status, {from: unsealer});
+      let offerUnsealedLog = await new Promise(
+          (resolve, reject) => offerUnsealed.get(
+          (error, log) => error ? reject(error) : resolve(log)));
+      assert.equal(offerUnsealedLog.length, 1, 'Only 1 event should have fired');
+  })
+
+  it("Unsealer unseals and rejects Eves offer", async function() {
+      secret_key = "klidi33idilk"
+      selector_key = "*" + secret_key + "*"
+      unseal_status = UNSEALER_REJECTED
+      let offerUnsealed = tender.OfferUnsealed();
+      const resp = await tender.unseal_offer(eve, selector_key, unseal_status, {from: unsealer});
+      let offerUnsealedLog = await new Promise(
+          (resolve, reject) => offerUnsealed.get(
+          (error, log) => error ? reject(error) : resolve(log)));
+      assert.equal(offerUnsealedLog.length, 1, 'Only 1 event should have fired');
+  })
+
+  it("David shares key with unsealer after sealing time due", async function() {
+      await timeTravel(301);
+      mineBlock();
+      symetric_key = "klidi44idilk"
+      unsealer_key = "+" + symetric_key + "+"
+      let error
+      try {
+          await tender.share_key_with_unsealer(unsealer_key, {from: david});
+      } catch (err) {
+          error = err;
+      }
+      assert.notEqual(error, undefined, 'Error must be thrown');
+  })
+
+  it("Selector selects rejected and fails", async function() {
+      unlocker = "**"
+      let offerUnsealed = tender.OfferUnsealed();
+      let error
+      try {
+          await tender.unseal_offer(eve, selector_key, unseal_status, {from: selector});
+      } catch (err) {
+          error = err;
+      }
+      assert.notEqual(error, undefined, 'Error must be thrown');
+  })
+
+  it("Unsealer selects offer and fails", async function() {
+      unlocker = "--"
+      let offerUnsealed = tender.OfferUnsealed();
+      let error
+      try {
+          await tender.unseal_offer(bob, selector_key, unseal_status, {from: unsealer});
+      } catch (err) {
+          error = err;
+      }
+      assert.notEqual(error, undefined, 'Error must be thrown');
+  })
+
+  it("Selector selects offer", async function() {
+      unlocker_key = "**"
+      let offerSelected = tender.OfferSelected();
+      const resp = await tender.select_offer(bob, unlocker_key, {from: selector});
+      let offerSelectedLog = await new Promise(
+          (resolve, reject) => offerSelected.get(
+          (error, log) => error ? reject(error) : resolve(log)));
+      assert.equal(offerSelectedLog.length, 1, 'Only 1 event should have fired');
+  })
 });
