@@ -21,7 +21,7 @@ contract Tender {
     uint8 private constant UNSEALER_REJECTED = 1;
     uint8 private constant UNSEALED = 2;
 
-    // smart contruct info
+    // smart contract info
     address public owner;
     mapping(address => Offer)   offers;
     /* mapping(address => uint32) owners; */
@@ -29,7 +29,7 @@ contract Tender {
     uint32  public sealed_count;
     uint32  public unsealed_count;
 
-    // Tender creation pubic info
+    // Tender creation public info
     string  public tender_desc;
     uint256 public submissions_due;
     uint256 public sealing_due;
