@@ -15,7 +15,7 @@ contract Tender {
     event NewOffer(address owner, bytes32 _offer_hash, bytes _sealed_offer);
     event UnsealerKeyShared(address owner, bytes _unsealer_key);
     event OfferUnsealed(address owner, bytes selector_key, uint8 unseal_status);
-    event OfferSelected(address owner);
+    event OfferSelected(address owner, bytes selector_unlocker_key);
 
     uint8 private constant AWAITING_UNSEALER = 0;
     uint8 private constant UNSEALER_REJECTED = 1;
@@ -115,14 +115,13 @@ contract Tender {
     function select_offer(address _offer_owner, bytes _selector_unlocker_key) public returns(bool) {
         require(now > sealing_due);
         require(!isSelected);
-        require(msg.sender == selector);              // must be selector to select
-        require(sealed_count == unsealed_count);      // all offers sealed has been unsealed
-        require(offers[_offer_owner].owner != 0x0);   // offer exists
-        require(offers[_offer_owner].unseal_status == UNSEALED);
+        require(msg.sender == selector);                          // must be selector to select
+        require(sealed_count == unsealed_count);                  // all offers sealed has been unsealed
+        require(offers[_offer_owner].unseal_status == UNSEALED);  // offer exists and is valid
         selected_offer = _offer_owner;
         isSelected = true;
         selector_unlocker_key = _selector_unlocker_key;
-        OfferSelected(_offer_owner);
+        OfferSelected(_offer_owner, _selector_unlocker_key);
         return true;
     }
 
