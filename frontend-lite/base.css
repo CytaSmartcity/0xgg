@@ -25,6 +25,8 @@
     /* color: #42b983; */
   }
 
+  /*Tender styles*/
+
 .offer-submission{
   background: #0E9577;
   color: #000;
@@ -63,6 +65,18 @@
   color: #000;
 }
 .ended:hover{
+  opacity: 0.9;
+  color: #000;
+}
+
+/* offers styles*/
+
+.offer-list-item {
+  background: #F1EFB9;
+  color: #000;
+}
+
+.offer-list-item:hover {
   opacity: 0.9;
   color: #000;
 }

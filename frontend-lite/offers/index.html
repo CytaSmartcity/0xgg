@@ -43,7 +43,7 @@
                         <div class="card-body">
 
                             <div class="list-group">
-
+                                
                             </div>
 
                         </div>
@@ -65,66 +65,14 @@
         crossorigin="anonymous"></script>
     <script src="/js/src.js"></script>
     <script>
-        var statusEnum = {
-            1: {
-                class: "offer-submission",
-                name: "offer submission"
-            },
-            2: {
-                class: "key-submission",
-                name: "key submission"
-            },
-            3: {
-                class: "unsealing",
-                name: "unsealing"
-            },
-            4: {
-                class: "selection",
-                name: "selection"
-            },
-            5: {
-                class: "ended",
-                name: "ended"
-            }
-        };
 
-        var typeEnum = {
-            1: {
-                name: "cheapest preffered",
-            },
-            2: {
-                name: "most beneficial preffered"
-            },
-            3: {
-                name: ""
-            }
-        }
-
-        var scopeEnum = {
-            1: {
-                name: "lights",
-            },
-            2: {
-                name: "parks"
-            },
-            3: {
-                name: "building maintenance"
-            },
-            4: {
-                name: "military"
-            }
-        }
-
-        function createtenderListItem(address, status, description, type, scope, submissions) {
+        function createOfferListItem(address, description) {
             var newListItem = '';
-            newListItem += '<a href="/tender.html?address=' + address;
-            newListItem += '" class="list-group-item ' + statusEnum[status].class;
-            newListItem += ' flex-column align-items-start"><div class="row"><div class="col-sm-9 mb-1 ml-auto mr-auto"><h5>Description:</h5><h5>' + description;
-            newListItem += '</h5></div><div class="col-sm-3"><h5>status:<span class="badge badge-light ml-1 mr-1">' + statusEnum[status].name;
-            newListItem += '</span></h5><h5>type:<span class="badge badge-light ml-1 mr-1">' + typeEnum[type].name;
-            newListItem += '</span></h5><h5>scope:<span class="badge badge-light ml-1 mr-1">' + scopeEnum[scope].name;
-            newListItem += '</span></h5><h5>submissions:<span class="badge badge-light ml-1 mr-1">' + submissions;
-            newListItem += '</span></h5></div></div></a>';
+
+            newListItem += '<a class="list-group-item flex-column align-items-start offer-list-item">';
+            newListItem += '<div class="row"><div class="col mb-1 ml-auto mr-auto">';
+            newListItem +='<h5>Description:</h5><p>'+description+'</p>';
+            newListItem += '</div></div></a>';
 
             console.log(newListItem);
 
