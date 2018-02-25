@@ -209,7 +209,8 @@
         });
 
         var offer_key = "";
-        var tenderAddress = "0x0"; // get this from url
+        var urlParams = new URLSearchParams(window.location.search);
+        var tenderAddress = urlParams.get('address'); // get this from url
 
         $(document).ready(function () {
             if (localStorage.getItem(tenderAddress)) {
@@ -221,6 +222,14 @@
                 offer_key = localStorage.getItem(tenderAddress);
                 console.log("offer key is empty");
             }
+
+            $("#offer_desc").keyup(function(){
+                if (!$.trim($("#offer_desc").val())){
+                    $("#submit-offer").addClass("disabled");
+                } else {
+                    $("#submit-offer").removeClass("disabled");
+                }
+            });
         });
 
         $("#gen-key").click(function () {
@@ -233,7 +242,7 @@
 
         $("#submit-offer").click(function () {
             if (!$(this).hasClass("disabled")) {
-                
+                // submit
             }
         });
     </script>
