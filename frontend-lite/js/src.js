@@ -1,7 +1,3 @@
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous"></script>
-<script>
-
 // function init() {
 var factoryAddress = "0x20a85115D76a63732beEeCE84715D402B66D79F6" //"0xCC6927405413B9888bb7Aed20CE19Cb60b43345d";
 var factoryAbi = [{"constant":true,"inputs":[{"name":"_address","type":"address"}],"name":"getCreated","outputs":[{"name":"","type":"address[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"uint256"}],"name":"created","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_tender_desc","type":"string"},{"name":"_submissions_due","type":"uint256"},{"name":"_sealing_due","type":"uint256"},{"name":"_unsealer","type":"address"},{"name":"_selector","type":"address"},{"name":"_tender_type","type":"uint8"},{"name":"_tender_scope","type":"uint8"},{"name":"_fund_cap","type":"uint256"}],"name":"createTender","outputs":[{"name":"","type":"address"}],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"isTender","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"sender","type":"address"},{"indexed":true,"name":"instantiation","type":"address"}],"name":"ContractInstantiation","type":"event"}]
@@ -55,6 +51,9 @@ async function getTenderInfo(address, temp) {
     temp['tender_type']     = (await promisify(cb => instance.tender_type.call(cb))).toNumber()
     temp['tender_scope']    = (await promisify(cb => instance.tender_scope.call(cb))).toNumber()
     temp['fund_cap']        = (await promisify(cb => instance.fund_cap.call(cb))).toNumber()
+    temp['offers_count']    = (await promisify(cb => instance.offers_count.call(cb))).toNumber()
+    temp['sealed_count']    = (await promisify(cb => instance.sealed_count.call(cb))).toNumber()
+    temp['unsealed_count']  = (await promisify(cb => instance.unsealed_count.call(cb))).toNumber()
     temp['owner']           = (await promisify(cb => instance.owner.call(cb)))
     return temp;
 }
@@ -103,7 +102,7 @@ async function loadTenderDetails(tenderAddress) {
   return result
 }
 
-loadTenderDetails('0x31Ac0EA17cdF24Ea32fd2597e85a808F980caAdB')
+// loadTenderDetails('0x31Ac0EA17cdF24Ea32fd2597e85a808F980caAdB')
 
 
 async function createTender(owner, tender_desc, submissions_due, sealing_due, unsealer, selector, tender_type, tender_scope, fund_cap) {
@@ -268,5 +267,3 @@ async function selectOffer(owner, tenderAddress, offer_owner, selector_unlocker_
   })
   console.log(txHash);
 }
-
-</script>

@@ -129,7 +129,20 @@
         $('#create_tender_form').on('submit', function(e){
             e.preventDefault();
             $('#create_tender_form').addClass('was-validated');
-            console.log($('#submissions_due').value);
+            console.log($('#submissions_due').val());
+
+            owner = web3.eth.accounts[0];
+            tender_desc = $("#tender_desc").val();
+            var from = $("#submissions_due").val().split("-");
+            var submissions_due = new Date(from[0], from[1] - 1, from[2]).getTime() / 1000;
+            var from = $("#sealing_due").val().split("-");
+            var sealing_due = new Date(from[0], from[1] - 1, from[2]).getTime() / 1000;
+            unsealer  = $('#unsealAddress').val()
+            selector = $('#selectAddress').val()
+            tender_type = $('#tenderType').val()
+            tender_scope = $('#fund_cap').val()
+            fund_cap = $('#fund_cap').val()
+            createTender(owner, tender_desc, submissions_due, sealing_due, unsealer, selector, tender_type, tender_scope, fund_cap)
         });
 
         $('#submissions_due').on('input', function(e){
