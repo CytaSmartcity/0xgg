@@ -92,6 +92,18 @@ contract('Tender', function(accounts) {
     assert.equal(newOfferLog.length, 1, 'Only 1 event should have fired');
   })
 
+  it("Bobs stored offer should match the offer fetched from chain", async function() {
+      offer = "ekato ena lefta";
+      offer_sealed = "|" + offer + "|";
+      const bobs_offer = await tender.offers.call(bob, {from: bob})
+      assert.equal(bobs_offer[0], bob)                        // owner
+      assert.equal(bobs_offer[1], web3.sha3(offer))           // offer_hash
+      assert.equal(web3.toAscii(bobs_offer[2]), offer_sealed) // sealed_offer
+      assert.equal(bobs_offer[3].length, 2)                   // unsealer_key
+      assert.equal(bobs_offer[4].toNumber(), 0)               // unseal_status
+      assert.equal(bobs_offer[5].length, 2)                   // selector_key
+  })
+
   it("David submits a sealed offer", async function() {
     offer = "ena lefta";
     offer_sealed = "|" + offer + "|";

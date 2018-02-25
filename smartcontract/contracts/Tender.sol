@@ -23,7 +23,7 @@ contract Tender {
 
     // smart contract info
     address public owner;
-    mapping(address => Offer)   offers;
+    mapping(address => Offer) public offers;
     /* mapping(address => uint32) owners; */
     uint32  public offers_count;
     uint32  public sealed_count;
@@ -72,6 +72,7 @@ contract Tender {
         selected_offer    = 0x0;
         isSelected        = false;
     }
+
 
     // submit undisclosed offer by submitting the sha256 of the offer
     function submit_sealed_offer(bytes32 _offer_hash, bytes _sealed_offer) public returns (bool) {
@@ -125,4 +126,8 @@ contract Tender {
         return true;
     }
 
+    // get owner by address
+    function get_offer(address _owner) public constant returns (address, bytes32, bytes, bytes, uint8, bytes) {
+      return (offers[_owner].owner, offers[owner].offer_hash, offers[owner].sealed_offer, offers[owner].unsealer_key, offers[owner].unseal_status, offers[owner].selector_key);
+    }
 }

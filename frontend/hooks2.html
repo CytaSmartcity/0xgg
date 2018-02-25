@@ -1,0 +1,46 @@
+<script>
+
+const promisify = (inner) =>
+  new Promise((resolve, reject) =>
+    inner((err, res) => {
+      if (err) { reject(err) }
+      resolve(res);
+    })
+  );
+
+var factoryAbi = [{"constant":true,"inputs":[{"name":"_address","type":"address"}],"name":"getCreated","outputs":[{"name":"","type":"address[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"uint256"}],"name":"created","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_tender_desc","type":"string"},{"name":"_submissions_due","type":"uint256"},{"name":"_sealing_due","type":"uint256"},{"name":"_unsealer","type":"address"},{"name":"_selector","type":"address"},{"name":"_tender_type","type":"uint8"},{"name":"_tender_scope","type":"uint8"},{"name":"_fund_cap","type":"uint256"}],"name":"createTender","outputs":[{"name":"","type":"address"}],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"isTender","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"sender","type":"address"},{"indexed":true,"name":"instantiation","type":"address"}],"name":"ContractInstantiation","type":"event"}]
+
+var factoryAddress = '0xCC6927405413B9888bb7Aed20CE19Cb60b43345d'
+
+async function getAllTenders() {
+  // console.log('running getall');
+  var factoryContract = web3.eth.contract(factoryAbi);
+  // instantiate by address
+  var factory = factoryContract.at(factoryAddress);
+
+  console.log(factory);
+  log = await promisify(cb => factory.ContractInstantiation({}, {fromBlock: 0, toBlock: 'latest'}).get(cb));
+  var result = []
+  console.log(log);
+  // for (var i in log) {
+  //   var temp = log[i].args
+  //   temp = await getTenderData(log[i].args.instantiation, temp)
+  //   result.push(temp)
+  // }
+  return result
+}
+
+// async function getTenderData(address, temp) {
+//     var insuranceContract = web3.eth.contract([{"constant":true,"inputs":[],"name":"tender_type","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"sealer_lock","outputs":[{"name":"","type":"bytes"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_unsealer_key","type":"bytes"}],"name":"share_key_with_unsealer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_offer_owner","type":"address"},{"name":"_selector_unlocker_key","type":"bytes"}],"name":"select_offer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"sealed_count","outputs":[{"name":"","type":"uint32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"offers_count","outputs":[{"name":"","type":"uint32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"tender_scope","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"fund_cap","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"isSelected","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_offer_hash","type":"bytes32"},{"name":"_sealed_offer","type":"bytes"}],"name":"submit_sealed_offer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"sealing_due","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"submissions_due","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"selector_unlocker_key","outputs":[{"name":"","type":"bytes"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"unsealer","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"tender_desc","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_offer_owner","type":"address"},{"name":"_selector_key","type":"bytes"},{"name":"_unseal_status","type":"uint8"}],"name":"unseal_offer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"selector","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"unsealed_count","outputs":[{"name":"","type":"uint32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"selected_offer","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"_tender_desc","type":"string"},{"name":"_submissions_due","type":"uint256"},{"name":"_sealing_due","type":"uint256"},{"name":"_unsealer","type":"address"},{"name":"_selector","type":"address"},{"name":"_tender_type","type":"uint8"},{"name":"_tender_scope","type":"uint8"},{"name":"_fund_cap","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"owner","type":"address"},{"indexed":false,"name":"_offer_hash","type":"bytes32"},{"indexed":false,"name":"_sealed_offer","type":"bytes"}],"name":"NewOffer","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"owner","type":"address"},{"indexed":false,"name":"_unsealer_key","type":"bytes"}],"name":"UnsealerKeyShared","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"owner","type":"address"},{"indexed":false,"name":"selector_key","type":"bytes"},{"indexed":false,"name":"unseal_status","type":"uint8"}],"name":"OfferUnsealed","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"owner","type":"address"},{"indexed":false,"name":"selector_unlocker_key","type":"bytes"}],"name":"OfferSelected","type":"event"}]);
+//     var instance = insuranceContract.at(address);
+//     temp['tender_desc'] = (await promisify(cb => instance.tender_desc.call(cb)))
+//     return temp;
+// }
+
+var test = getAllTenders().then(
+  console.log()
+).catch(
+  console.error
+)
+
+</script>
