@@ -38,7 +38,7 @@
                 </div>
             </nav>
             <h2>Create New Tender</h2>
-            <form>
+            <form id="create_tender_form">
                 <div class="card mb-2">
                     <div class="card-body">
                         <div class="form-row">
@@ -71,11 +71,11 @@
                         <div class="form-row">
                             <div class="form-group col">
                                 <label for="submissions_due">Submissions Due:</label>
-                                <input id="submissions_due" type="date" class="form-control">
+                                <input id="submissions_due" type="date" class="form-control" min="2018-02-25">
                             </div>
                             <div class="form-group col">
                                 <label for="sealing_due">Sealing Keys Due:</label>
-                                <input id="sealing_due" type="date" class="form-control">
+                                <input id="sealing_due" type="date" class="form-control" min="2018-02-25">
                             </div>
                         </div>
                         <div class="form-row">
@@ -123,7 +123,22 @@
         crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+    <script src="/moment.min.js"></script>
     <script src="/js/src.js"></script>
+    <script>
+        $('#create_tender_form').on('submit', function(e){
+            e.preventDefault();
+            $('#create_tender_form').addClass('was-validated');
+            console.log($('#submissions_due').value);
+        });
+
+        $('#submissions_due').on('input', function(e){
+            var sub_date = $('#submissions_due').val();
+            if(moment(sub_date, 'YYYY-MM-DD', true).isValid()){
+                $('#sealing_due').attr('min', sub_date);
+            }
+        })
+    </script>
 </body>
 
 </html>

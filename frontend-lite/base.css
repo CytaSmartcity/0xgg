@@ -22,5 +22,47 @@
   }
   
   a {
-    color: #42b983;
+    /* color: #42b983; */
   }
+
+.offer-submission{
+  background: #0E9577;
+  color: #000;
+}
+.key-submission{
+  background: #04DEAD;
+  color: #000;
+}
+.unsealing {
+  background: #F1EFB9;
+  color: #000;
+}
+.selection {
+  background: #FBFAE1;
+  color: #000;
+}
+.ended {
+  background: #ccc;
+  color: #000;
+}
+
+.offer-submission:hover{
+  opacity: 0.9;
+  color: #000;
+}
+.key-submission:hover{
+  opacity: 0.9;
+  color: #000;
+}
+.unsealing:hover{
+  opacity: 0.9;
+  color: #000;
+}
+.selection:hover{
+  opacity: 0.9;
+  color: #000;
+}
+.ended:hover{
+  opacity: 0.9;
+  color: #000;
+}
