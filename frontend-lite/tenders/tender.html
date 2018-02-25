@@ -113,7 +113,12 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col">
-                                        <input class="btn btn-primary" type="submit" value="Submit">
+                                        <button id="gen-key" type="button" class="btn btn-secondary btn-block">Generate key</button>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col">
+                                        <button id="submit-offer" type="button" class="btn btn-secondary btn-block disabled">Submit</button>
                                     </div>
                                 </div>
                             </div>
@@ -135,6 +140,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
     <script src="/js/src.js"></script>
+    <script src="/nacl_factory.js"></script>
     <script>
         var statusEnum = {
             1: {
@@ -185,6 +191,51 @@
                 name: "military"
             }
         }
+
+        ToBase64 = function (u8) {
+            return btoa(String.fromCharCode.apply(null, u8));
+        }
+
+        FromBase64 = function (str) {
+            return atob(str).split('').map(function (c) {
+                return c.charCodeAt(0);
+            });
+        }
+
+        var nacl_gateway;
+
+        nacl_factory.instantiate(function (nacl) {
+            nacl_gateway = nacl;
+        });
+
+        var offer_key = "";
+        var tenderAddress = "0x0"; // get this from url
+
+        $(document).ready(function () {
+            if (localStorage.getItem(tenderAddress)) {
+                offer_key = localStorage.getItem(tenderAddress);
+                $("#gen-key").addClass("disabled");
+                console.log("offer key already exists: " + offer_key);
+            } else {
+                $("#gen-key").removeClass("disabled");
+                offer_key = localStorage.getItem(tenderAddress);
+                console.log("offer key is empty");
+            }
+        });
+
+        $("#gen-key").click(function () {
+            if (!$(this).hasClass("disabled")) {
+                offer_key = ToBase64(nacl_gateway.crypto_box_keypair().boxPk);
+                localStorage.setItem(tenderAddress, offer_key);
+                console.log("new offer key generated: " + offer_key);
+            }
+        });
+
+        $("#submit-offer").click(function () {
+            if (!$(this).hasClass("disabled")) {
+                
+            }
+        });
     </script>
 </body>
 
