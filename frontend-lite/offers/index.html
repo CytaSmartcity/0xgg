@@ -43,7 +43,7 @@
                         <div class="card-body">
 
                             <div class="list-group">
-                                
+
                             </div>
 
                         </div>
@@ -71,13 +71,36 @@
 
             newListItem += '<a class="list-group-item flex-column align-items-start offer-list-item">';
             newListItem += '<div class="row"><div class="col mb-1 ml-auto mr-auto">';
-            newListItem +='<h5>Description:</h5><p>'+description+'</p>';
+            newListItem += '<h5>Description:</h5><p>' + description + '</p>';
             newListItem += '</div></div></a>';
 
             console.log(newListItem);
 
             $(".list-group").append(newListItem);
         }
+
+        $(document).ready(function () {
+
+            var urlParams = new URLSearchParams(window.location.search);
+
+            if(urlParams.has('address')){
+            var tenderAddress =urlParams.get('address');
+
+                loadTenderDetails(tenderAddress)
+                    .then(function (offers) {
+                        console.log(offers);
+                        for (i = 0; i < offers.length; i++) {
+                            var offer = offers[i].offers;// remove extra array structure
+                            //TODO deal with binary
+                            createOfferListItem(offer[0], offer[2]);
+                        }
+                    })
+                }
+                else {
+                    alert('please enter a valid tender address to the url')
+                }
+
+        })
     </script>
 </body>
 

@@ -80,8 +80,8 @@ async function loadTenderOfferDetails(owner, tenderAddress, ownerAddress) {
   var tenderContract = web3.eth.contract(tenderAbi);
   var instance = tenderContract.at(tenderAddress);
   var temp = {}
-  temp['offers'] = (await promisify(cb => instance.get_offer.call(ownerAddress, {from: owner}, cb)))
-  console.log('x' + temp)
+  temp['offers'] = (await promisify(cb => instance.offers.call(ownerAddress, {from: owner}, cb)))
+  console.log(temp)
   return temp
 }
 
@@ -96,11 +96,11 @@ async function loadTenderDetails(tenderAddress) {
   var result = []
   for (var i in log2) {
     temp = log2[i].args
-    console.log('y' + log2[i]);
+    // console.log('y' + log2[i]);
     temp = await loadTenderOfferDetails(web3.eth.accounts[0], tenderAddress, log2[i].args.owner)
     result.push(temp)
   }
-  console.log(result)
+  // console.log(result)
   return result
 }
 
