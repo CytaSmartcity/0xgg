@@ -82,7 +82,7 @@ contract Tender {
         offers[msg.sender].sealed_offer = _sealed_offer;
         offers[msg.sender].owner = msg.sender;
         offers_count++;
-        NewOffer(owner, _offer_hash, _sealed_offer);
+        NewOffer(msg.sender, _offer_hash, _sealed_offer);
         return true;
     }
 
