@@ -54,6 +54,7 @@ async function getTenderInfo(address, temp) {
     temp['offers_count']    = (await promisify(cb => instance.offers_count.call(cb))).toNumber()
     temp['sealed_count']    = (await promisify(cb => instance.sealed_count.call(cb))).toNumber()
     temp['unsealed_count']  = (await promisify(cb => instance.unsealed_count.call(cb))).toNumber()
+    temp['isSelected']      = (await promisify(cb => instance.isSelected.call(cb)))
     temp['owner']           = (await promisify(cb => instance.owner.call(cb)))
     return temp;
 }

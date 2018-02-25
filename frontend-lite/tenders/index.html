@@ -133,22 +133,19 @@
             $(".list-group").append(newListItem);
         }
 
-        function statusHelper() {
-          return 1
-        }
-
         $(document).ready(function () {
           loadTenders()
           .then(function (tenders) {
             console.log('x' + tenders)
             for (i = 0; i < tenders.length; i++) {
               console.log(i)
-              now = new date().getTime()/1000
+              now = new Date().getTime()/1000
               if (now <= tenders[i].submissions_due) state = 1
               if ((now > tenders[i].submissions_due) && (now <= tenders[i].sealing_due) && (tenders[i].offers_count < tenders[i].sealed_count)) state = 2
-              if ((tenders[i].offers_count == tenders[i].sealed_count) || (now > tenders[i].sealing_due)) state = 2
-
-              createtenderListItem(tenders[i].instantiation, statusHelper(), tenders[i].tender_desc, tenders[i].tender_type, tenders[i].tender_scope, tenders[i].offers_count)
+              if ((tenders[i].offers_count == tenders[i].sealed_count) || (now > tenders[i].sealing_due)) state = 3
+              if ((tenders[i].sealed_count == tenders[i].unsealed_count) || (now > tenders[i].sealing_due)) state = 4
+              if (tenders[i].isSelected) state = 5
+              createtenderListItem(tenders[i].instantiation, state, tenders[i].tender_desc, tenders[i].tender_type, tenders[i].tender_scope, tenders[i].offers_count)
             }
           })
 
