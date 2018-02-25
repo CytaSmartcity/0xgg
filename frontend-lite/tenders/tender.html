@@ -46,18 +46,18 @@
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">Description</h5>
-                            <p class="card-text">blahblah</p>
+                            <p id="tender-description" class="card-text"></p>
 
                             <div class="card-group">
                                 <div class="card">
                                     <h5 class="card-title">Tender type:
-                                        <span class="badge badge-light ml-1 mr-1">typehere</span>
+                                        <span id="type" class="badge badge-light ml-1 mr-1">typehere</span>
                                     </h5>
                                 </div>
 
                                 <div class="card">
                                     <h5 class="card-title">Tender scope:
-                                        <span class="badge badge-light ml-1 mr-1">scopehere</span>
+                                        <span id="scope" class="badge badge-light ml-1 mr-1">scopehere</span>
                                     </h5>
                                 </div>
                             </div>
@@ -65,12 +65,12 @@
                             <div class="card-group">
                                 <div class="card">
                                     <h5 class="card-title">Offer submission due:
-                                        <span class="badge badge-light ml-1 mr-1">datehere</span>
+                                        <span id="offer-due" class="badge badge-light ml-1 mr-1">datehere</span>
                                     </h5>
                                 </div>
 
                                 <div class="card">
-                                    <h5 class="card-title">Key submission due:
+                                    <h5 id="key-due" class="card-title">Key submission due:
                                         <span class="badge badge-light ml-1 mr-1">datehere</span>
                                     </h5>
                                 </div>
@@ -79,13 +79,13 @@
                             <div class="card-group">
                                 <div class="card">
                                     <h5 class="card-title">Fund cap:
-                                        <span class="badge badge-light ml-1 mr-1">150000</span>
+                                        <span id="fund-cap" class="badge badge-light ml-1 mr-1">150000</span>
                                     </h5>
                                 </div>
 
                                 <div class="card">
                                     <h5 class="card-title">Submitted offers:
-                                        <span class="badge badge-light ml-1 mr-1">123</span>
+                                        <span id="offers" class="badge badge-light ml-1 mr-1">123</span>
                                     </h5>
                                 </div>
                             </div>
@@ -299,7 +299,28 @@
 
         var temp = {};
 
-        var tender = getTenderInfo(tenderAddress, temp)
+
+
+        $(document).ready(function () {
+            if (localStorage.getItem(tenderAddress)) {
+                offer_key = localStorage.getItem(tenderAddress);
+                $("#gen-key").addClass("disabled");
+                console.log("offer key already exists: " + offer_key);
+            } else {
+                $("#gen-key").removeClass("disabled");
+                offer_key = localStorage.getItem(tenderAddress);
+                console.log("offer key is empty");
+            }
+
+            $("#offer_desc").keyup(function () {
+                if (!$.trim($("#offer_desc").val())) {
+                    $("#submit-offer").addClass("disabled");
+                } else {
+                    $("#submit-offer").removeClass("disabled");
+                }
+            });
+
+            var tender = getTenderInfo(tenderAddress, temp)
             .then(function (tender) {
                 now = new Date().getTime() / 1000;
                 if (now <= tender.submissions_due) tenderStatus = 1;
@@ -328,31 +349,19 @@
                     default:
                         break;
                 }
+
+                $("#offers").text(tender.offers_count);
+                $("#status").text(statusEnum[tenderStatus].class);
+                console.log("status:", statusEnum[tenderStatus].class);
+                $("#type").text(typeEnum[tender.tender_type].class);
+                $("#fund-cap").text(tender.fund);
+                $("#tender-description").text(tender.tender_desc);
+
+
                 console.log(tenderStatus);
             }).catch(function(error) {
                 console.log(error);
             });
-
-        $(document).ready(function () {
-            if (localStorage.getItem(tenderAddress)) {
-                offer_key = localStorage.getItem(tenderAddress);
-                $("#gen-key").addClass("disabled");
-                console.log("offer key already exists: " + offer_key);
-            } else {
-                $("#gen-key").removeClass("disabled");
-                offer_key = localStorage.getItem(tenderAddress);
-                console.log("offer key is empty");
-            }
-
-            $("#offer_desc").keyup(function () {
-                if (!$.trim($("#offer_desc").val())) {
-                    $("#submit-offer").addClass("disabled");
-                } else {
-                    $("#submit-offer").removeClass("disabled");
-                }
-            });
-
-            // get tenderStatus
         });
 
         $("#gen-key").click(function () {
