@@ -96,7 +96,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div id="offer-submission" class="row d-none">
                 <div class="col">
 
                     <form>
@@ -128,7 +128,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div id="key-submission" class="row d-none">
                 <div class="col">
 
                     <form>
@@ -139,7 +139,70 @@
                             <div class="card-body">
                                 <div class="form-row">
                                     <div class="form-group col">
-                                        <button id="submit-key" type="button" class="btn btn-secondary btn-block">Submit key</button>
+                                        <button id="submit-key" type="button" class="btn btn-secondary disabled btn-block">Submit key</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+            <div id="unsealing" class="row d-none">
+                <div class="col">
+
+                    <form>
+                        <div class="card mb-2">
+                            <div class="card-header">
+                                Unsealing
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group col">
+                                        <button id="unseal" type="button" class="btn btn-secondary disabled btn-block">Unseal Offers</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+            <div id="selecting" class="row d-none">
+                <div class="col">
+
+                    <form>
+                        <div class="card mb-2">
+                            <div class="card-header">
+                                Selecting
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group col">
+                                        <button id="unseal" type="button" class="btn btn-secondary disabled btn-block">Select Offer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+            <div id="verifying" class="row d-none">
+                <div class="col">
+
+                    <form>
+                        <div class="card mb-2">
+                            <div class="card-header">
+                                Verifying
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group col">
+                                        <button id="unseal" type="button" class="btn btn-secondary disabled btn-block">Verify Offers</button>
                                     </div>
                                 </div>
                             </div>
@@ -232,6 +295,43 @@
         var offer_key = "";
         var urlParams = new URLSearchParams(window.location.search);
         var tenderAddress = urlParams.get('address'); // get this from url
+        var tenderStatus = 0;
+
+        var temp = {};
+
+        var tender = getTenderInfo(tenderAddress, temp)
+            .then(function (tender) {
+                now = new Date().getTime() / 1000;
+                if (now <= tender.submissions_due) tenderStatus = 1;
+                if ((now > tender.submissions_due) && (now <= tender.sealing_due) && (tender.offers_count < tender.sealed_count)) tenderStatus = 2;
+                if ((tender.offers_count == tender.sealed_count) || (now > tender.sealing_due)) tenderStatus = 3;
+                if ((tender.sealed_count == tender.unsealed_count) || (now > tender.sealing_due)) tenderStatus = 4;
+                if (tender.isSelected) tenderStatus = 5;
+
+                switch (tenderStatus) {
+                    case 1: 
+                        $("#offer-submission").removeClass("d-none");
+                        break;
+                    case 2: 
+                        $("#key-submission").removeClass("d-none");
+                        break;
+                    case 3: 
+                        $("#unsealing").removeClass("d-none");
+                        break;
+                    case 4: 
+                        $("#selecting").removeClass("d-none");
+                        break;
+                    case 5: 
+                        $("#verifying").removeClass("d-none");
+                        break;
+                    
+                    default:
+                        break;
+                }
+                console.log(tenderStatus);
+            }).catch(function(error) {
+                console.log(error);
+            });
 
         $(document).ready(function () {
             if (localStorage.getItem(tenderAddress)) {
@@ -251,6 +351,8 @@
                     $("#submit-offer").removeClass("disabled");
                 }
             });
+
+            // get tenderStatus
         });
 
         $("#gen-key").click(function () {
