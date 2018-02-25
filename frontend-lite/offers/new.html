@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>0xgg - Intro</title>
+    <title>0xGG - Create new offer</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
         crossorigin="anonymous">
     <link rel="stylesheet" href="/base.css">
@@ -23,7 +23,7 @@
                 <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
                     <a class="navbar-brand" href="#">0xGG</a>
                     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                        <li class="nav-item active">
+                        <li class="nav-item">
                             <a class="nav-link" href="/">Home
                                 <span class="sr-only">(current)</span>
                             </a>
@@ -37,30 +37,24 @@
                     </ul>
                 </div>
             </nav>
-            <div class="jumbotron intro-header">
-                <h1 class="display-4">Bid &amp; Tender Management on Blockchain</h1>
-                <p class="lead">an idea by 0xGG</p>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">View Tenders</h4>
-                            <h6 class="card-subtitle mb-2 text-muted">List of all tenders available</h6>
-                            <a href="/tenders" target="_self" class="btn btn-secondary">View All</a>
+            <h2>Create New Offer</h2>
+            <form>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-9">
+                                <label for="offerDesc">Offer Description</label>
+                                <textarea class="form-control" id="offerDesc" rows="3"></textarea>
+                            </div>
+                            <div class="form-group col-9">
+                                <textarea readonly class="form-control" id="offerHash" rows="3"></textarea>
+                            </div>
                         </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">Create New Tender</h4>
-                            <h6 class="card-subtitle mb-2 text-muted">Offer a new tender of your own</h6>
-                            <a href="/tenders/new" target="_self" class="btn btn-secondary">Create Tender</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                
+            </form>
         </div>
     </div>
     <footer class="container">

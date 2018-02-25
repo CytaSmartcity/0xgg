@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>0xGG - Create new tender</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="/base.css">
+    <style type="text/css"></style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+                    <a class="navbar-brand" href="#">0xGG</a>
+                    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Home
+                                <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/tenders">Tenders</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/tenders/new">Create Tender</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <h2>Create New Tender</h2>
+            <form>
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="col">
+                                <h4 class="card-title">Tender details</h4>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label for="tenderType">Tender Type</label>
+                                <select id="tenderType" class="form-control">
+                                    <option value="" selected>Choose...</option>
+                                    <option value="0">Cheapest preferred</option>
+                                    <option value="1">Most Beneficial preferred</option>
+                                    <option value="2">Type 3 preferred</option>
+                                </select>
+                            </div>
+                            <div class="form-group col">
+                                <label for="tenderScope">Tender Scope</label>
+                                <select id="tenderScope" class="form-control">
+                                    <option value="" selected>Choose...</option>
+                                    <option value="0">Roads</option>
+                                    <option value="1">Lights</option>
+                                    <option value="2">Parks</option>
+                                    <option value="3">Building Maintenance</option>
+                                    <option value="4">Military</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label for="submissions_due">Submissions Due:</label>
+                                <input id="submissions_due" type="date" class="form-control">
+                            </div>
+                            <div class="form-group col">
+                                <label for="sealing_due">Sealing Keys Due:</label>
+                                <input id="sealing_due" type="date" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-6">
+                                <label for="fund_cap">Fund Cap</label>
+                                <input id="fund_cap" type="number" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label for="tender_desc">Tender Description</label>
+                                <textarea class="form-control" id="tender_desc" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="col">
+                                <h4 class="card-title">User details</h4>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="unsealAddress">Unsealer Address</label>
+                            <input id="unsealAddress" type="text" class="form-control" placeholder="Enter blockchain address for offer unsealer">
+                        </div>
+                        <div class="form-group">
+                            <label for="selectAddress">Offer Selecter Address</label>
+                            <input id="selectAddress" type="text" class="form-control" placeholder="Enter blockchain address for offer selecter">
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+    <footer class="container">
+        <p>&copy; 0xGG 2018</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="/js/src.js"></script>
+</body>
+
+</html>
