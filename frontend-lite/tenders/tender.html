@@ -102,12 +102,12 @@
                     <form>
                         <div class="card mb-2">
                             <div class="card-header">
-                                Submit offer
+                                Offer Submission
                             </div>
                             <div class="card-body">
                                 <div class="form-row">
                                     <div class="form-group col">
-                                        <label for="tender_desc">Tender Description</label>
+                                        <label for="offer_desc">Tender Description</label>
                                         <textarea class="form-control" id="offer_desc" rows="3"></textarea>
                                     </div>
                                 </div>
@@ -223,8 +223,8 @@
                 console.log("offer key is empty");
             }
 
-            $("#offer_desc").keyup(function(){
-                if (!$.trim($("#offer_desc").val())){
+            $("#offer_desc").keyup(function () {
+                if (!$.trim($("#offer_desc").val())) {
                     $("#submit-offer").addClass("disabled");
                 } else {
                     $("#submit-offer").removeClass("disabled");
